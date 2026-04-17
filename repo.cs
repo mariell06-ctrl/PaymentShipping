@@ -54,25 +54,28 @@ namespace RepData
     }
     public class Orderrepo
     {
-        private const string path = "order.json";
+        private const string paypath = "payment.json";
         private const string connString =
              "Server=localhost\\SQLEXPRESS;Database=DBPaymentShipping;Integrated Security=True;TrustServerCertificate=True;";
+
+        //JSON
         public void savePay(payinfo payment)
         {
             List<payinfo> payments = new List<payinfo>();
 
-            if (File.Exists(path))
+            if (File.Exists(paypath))
             {
-                string existingData = File.ReadAllText(path);
+                string existingData = File.ReadAllText(paypath);
                 payments = JsonConvert.DeserializeObject<List<payinfo>>(existingData)
                            ?? new List<payinfo>();
             }
 
             payments.Add(payment);
             string json = JsonConvert.SerializeObject(payments, Formatting.Indented);
-            File.WriteAllText(path, json);
+            File.WriteAllText(paypath, json);
 
 
+            //MS SQL
 
             using (SqlConnection conn = new SqlConnection(connString))
             {
@@ -92,35 +95,44 @@ namespace RepData
                 }
             }
         }
-        public void saveShip(shipinfo shipping)
+    }
+        public class shippingpath
         {
-            List<shipinfo> shippings = new List<shipinfo>();
+            private const string shippath = "ship.json";
+            private const string connString =
+                 "Server=localhost\\SQLEXPRESS;Database=DBPaymentShipping;Integrated Security=True;TrustServerCertificate=True;";
 
-            if (File.Exists(path))
+            //JSON
+            public void saveShip(shipinfo shipping)
             {
-                string existingData = File.ReadAllText(path);
-                shippings = JsonConvert.DeserializeObject<List<shipinfo>>(existingData)
-                            ?? new List<shipinfo>();
-            }
+                List<shipinfo> shippings = new List<shipinfo>();
 
-            shippings.Add(shipping);
-            string json = JsonConvert.SerializeObject(shippings, Formatting.Indented);
-            File.WriteAllText(path, json);
-
-
-
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                conn.Open();
-                string query = @"INSERT INTO Shippings (address, contactNumber) 
-                                VALUES (@Address, @ContactNum)";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                if (File.Exists(shippath))
                 {
-                    cmd.Parameters.AddWithValue("@Address", shipping.address ?? "");
-                    cmd.Parameters.AddWithValue("@ContactNum", shipping.contactnum ?? "");
-                    cmd.ExecuteNonQuery();
+                    string existingData = File.ReadAllText(shippath);
+                    shippings = JsonConvert.DeserializeObject<List<shipinfo>>(existingData)
+                                ?? new List<shipinfo>();
+                }
+
+                shippings.Add(shipping);
+                string json = JsonConvert.SerializeObject(shippings, Formatting.Indented);
+                File.WriteAllText(shippath, json);
+
+                // MS SQL
+
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    conn.Open();
+                    string query = @"INSERT INTO Shippings (address, contactNumber) 
+                                VALUES (@Address, @ContactNum)";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Address", shipping.address ?? "");
+                        cmd.Parameters.AddWithValue("@ContactNum", shipping.contactnum ?? "");
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
         }
     }
-}
+

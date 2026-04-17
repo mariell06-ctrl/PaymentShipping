@@ -1,0 +1,37 @@
+[
+  {
+    "method": "PayMaya",
+    "cardNumber": null,
+    "phoneNumber": "090909090",
+    "cardHolder": null,
+    "email": null
+  },
+  {
+    "method": "PayPal",
+    "cardNumber": "827326278297265367",
+    "phoneNumber": null,
+    "cardHolder": "Xiever Ko",
+    "email": "majnsijdnd@gamao.com"
+  },
+  {
+    "method": "Cash",
+    "cardNumber": null,
+    "phoneNumber": null,
+    "cardHolder": null,
+    "email": null
+  },
+  {
+    "method": "Gcash",
+    "cardNumber": null,
+    "phoneNumber": "09451977761",
+    "cardHolder": null,
+    "email": null
+  },
+  {
+    "method": "Cash",
+    "cardNumber": null,
+    "phoneNumber": null,
+    "cardHolder": null,
+    "email": null
+  }
+]
